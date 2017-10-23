@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ecn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-mvvm</title>
+</head>
+<body>
+
+    <div id="app">
+        <input type="text" v-model="hello">
+        <input type="text" v-model="child.world">
+        <p v-class="className" class="abc"> </p>
+        第一个输入框：<span> {{hello}} </span> <br>
+        第二个输入框：<span v-text="child.world"></span>
+        <p v-html="htmlStr"></p>
+        <p>点击,把两个输入框的值交换:</p>
+        <button v-on:click="clickBtn">交换两个值</button>
+        <p v-on:click="changeArr">{{arr}}</p>
+    </div>
+    <script src="./src/util.js"></script>
+    <script src="./src/observer.js"></script>
+    <script src="./src/watcher.js"></script>
+    <script src="./src/compile.js"></script>
+    <script src="./src/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                hello: 'hello',
+                className: 'text',
+                htmlStr: '<h3>我是v-html</h3>',
+                child: {
+                    world: 'World !'
+                },
+                arr: [1, 2, 3]
+            },
+
+            methods: {
+                clickBtn: function(e) {
+                    // 点击交换两个input的值
+                    var tmp = this.hello;
+
+                    this.hello = this.child.world;
+                    this.child.world = tmp;
+                },
+
+                changeArr: function () {
+                    this.arr.$remove(2);
+                    setTimeout(function () {
+                        this.arr.$set(4, 4);
+                    }.bind(this), 2000)
+                }
+            }
+        });
+
+        vm.$watch('child.someStr', function() {
+            console.log(arguments);
+        });
+    </script>
+</body>
+</html>
